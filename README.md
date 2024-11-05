@@ -1,30 +1,30 @@
-# computer-network
+# Computer Network
 
-Writer Information
+## Writer Information
 
-Name: Kim Jinha
+- **Name:** Kim Jinha
+- **Major:** AI
+- **Code:** 202135751
 
-Major: AI
+## Socket Homework - Quiz Game
 
-Code: 202135751
+### Project Overview
+Create a quiz game program using sockets.
 
+### Goals
+1. Read server information from `server_info.dat` in the client program.
+2. Request questions from the server, receive answers from the user, and then request results from the server.
+3. The server should save the score of the current user and send it to the client when all questions are completed.
+4. Use threads to allow multiple clients to connect simultaneously.
 
-Socket Homwork - Quiz game
+### Key Points
 
-Make a quiz game program using socket.
+#### Server
+- Read `quiz_ans.dat`, saving each line containing a question and answer separated by `/` (Q/A) using an `ArrayList`.
+- Parallelize by delegating socket connections to threads to handle multiple clients.
+- Specify command format to detail client requests.
 
-Goals
-1. read server information from "server_info.dat" in client program
-2. request question to server, get answer from user, and then request result to server.
-3. server should save a score of current user, and send to client when all questions end.
-4. use thread to allow multiple client.
-
-Key Points (Server)
-1. Server read qiz_ans.dat, and save each line contains question and answer separated by '/' (Q/A), using ArrayList.
-2. It was parallelized by turning the socket over to the thread so that the server could receive multiple clients.
-3. The command format was specified to indicate the client request in detail.
-
-Key Points (Client)
-1. Simple decoration to implement quiz games
-2. The Client class focuses only on connecting to the server, and delegates communication with the server to the Client CommandHandler
-3. Disconnect notification to server to prevent abnormal termination
+#### Client
+- Implement simple decorations for the quiz game interface.
+- The Client class focuses on connecting to the server, delegating communication to the `Client CommandHandler`.
+- Send a disconnect notification to the server to prevent abnormal termination.
