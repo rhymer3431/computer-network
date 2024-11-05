@@ -1,10 +1,6 @@
 # Computer Network
 
-## Writer Information
 
-- **Name:** Kim Jinha
-- **Major:** AI
-- **Code:** 202135751
 
 ## Socket Homework - Quiz Game
 
@@ -28,3 +24,9 @@ Create a quiz game program using sockets.
 - Implement simple decorations for the quiz game interface.
 - The Client class focuses on connecting to the server, delegating communication to the `Client CommandHandler`.
 - Send a disconnect notification to the server to prevent abnormal termination.
+
+## Writer Information
+
+- **Name:** Kim Jinha
+- **Major:** AI
+- **Code:** 202135751
