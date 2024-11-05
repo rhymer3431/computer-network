@@ -1,17 +1,25 @@
+/*
+ * ClientCommandHandler is a class that formats messages according to 
+ * what client want to request to server.
+ */
+
 package client;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 
 public class ClientCommandHandler {
-    private static BufferedReader clientReader;
-    private static PrintWriter clientWriter;
+    private static BufferedReader keyboard; // user input
+    private static BufferedReader clientReader; // read input from server
+    private static PrintWriter clientWriter; // write output to server
 
-    public ClientCommandHandler(BufferedReader reader, PrintWriter writer){
+    public ClientCommandHandler(BufferedReader key, BufferedReader reader, PrintWriter writer){
+        keyboard = key;
         clientReader = reader;
         clientWriter = writer;
     }
 
+    // request total score of current user
     public int getScore(){
         try {
             clientWriter.println("request/score");
@@ -22,10 +30,17 @@ public class ClientCommandHandler {
             return -1;
         }
     }
+
+    // request question of the number
     public String getQuestion(int number){
         try{
+            // setup request format
             String request_command = "request/question/"+ String.valueOf(number);
+
+            // send request to server
             clientWriter.println(request_command);
+
+            // receive question
             String question = clientReader.readLine();
             return question;  
         }
@@ -36,16 +51,18 @@ public class ClientCommandHandler {
     }
     public void getResult(int number, String answer){
         try {
-            int RESULT = 1;
+            // result format(correct answer/true or false)
             int ANSWER = 0;
+            int RESULT = 1;
+            
             // send answer to server
             clientWriter.println("request/answer/"+String.valueOf(number)+"/"+answer);
             
-            // receive result from server format like "result/answer"
+            // receive result from server
             String[] result = clientReader.readLine().split("/");
             if(result[RESULT].equals("true")){
                 System.out.printf("┌─────────────┐\n");
-                System.out.printf("│  *correct*  │ (+10 points)\n");
+                System.out.printf("│  *correct*  │ (+10 points)\n"); // actual score increases in server
                 System.out.printf("└─────────────┘\n");
             }
             else{
@@ -57,6 +74,33 @@ public class ClientCommandHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+    }
+
+    // send disconnect request to server
+    public void disconnect(){
+        clientWriter.println("disconnect");
+    }
+
+    // request question and show up
+    public void question(int number){
+        // request question to server
+        String question = getQuestion(number);
+                
+        // question format
+        System.out.printf("[Question %d/10]\n%s\n",number+1,question);
+    }
+
+    // read user input, and request result for answer.
+    public void answer(int number){
+        // read answer from user
+        try{
+            System.out.printf("\nEnter answer : ");
+            String answer = keyboard.readLine();
+            // send to server, and get result
+            getResult(number,answer);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }
