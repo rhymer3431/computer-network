@@ -1,7 +1,5 @@
 # Computer Network
 
-
-
 ## Socket Homework - Quiz Game
 
 ### Project Overview
@@ -26,34 +24,34 @@ Create a quiz game program using sockets.
 - Send a disconnect notification to the server to prevent abnormal termination.
 
 ### Protocol
-Command Protocol
-Command is separated by ‘/’ character, and format like Type/Target/Number.
-Command Type
-1.	Request : request is used when a client requests something from a server
-2.	Message : just show up message, but not used in this program. Add just in case.
-3.	Disconnect : client alert server to disconnect
 
-For example, if client want to request question 5, send string “request/question/4” to server. because question 5 is stored in QAList[4].
-Message command is simple, send “message/hi” to server, then server will show up “hi”.
-Disconnect command is set ClientHandler’s loop condition to false, so it makes disconnect safely.
-request is used when a client requests something from a server.
+#### Command Protocol
+- Commands are separated by the ‘/’ character and formatted as `Type/Target/Number`.
 
-Server_info Protocol
-Simple protocol to read information.
-Data name:Data
-Separate by ‘:’ to allocate each data.
+**Command Types:**
+1. **Request:** Used when a client requests something from the server.
+2. **Message:** Just displays a message but is not used in this program (included for future reference).
+3. **Disconnect:** Alerts the server to disconnect the client.
 
-Question and answer Protocol
-Simple protocol to read question and answer
-Question/Answer
-Separated by ‘/’ to allocate each data.
+**Example:**
+- To request question 5, send the string `request/question/4` to the server (since question 5 is stored in `QAList[4]`).
+- For a simple message, send `message/hi` to the server, which will then display “hi”.
+- The disconnect command sets the `ClientHandler`'s loop condition to false, ensuring safe disconnection.
+
+#### Server_info Protocol
+- A simple protocol to read information.
+- **Data Format:** `DataName:Data`
+- Use `:` to separate each data entry.
+
+#### Question and Answer Protocol
+- A simple protocol to read questions and answers.
+- **Format:** `Question/Answer`
+- Use `/` to separate each data entry.
 
 #### Architecture Diagram
 ![Diagram](https://github.com/rhymer3431/computer-network/blob/main/%EC%95%84%ED%82%A4%ED%85%8D%EC%B3%90.png?raw=true)
 
 ## Writer Information
-
 - **Name:** Kim Jinha
 - **Major:** AI
 - **Code:** 202135751
-
