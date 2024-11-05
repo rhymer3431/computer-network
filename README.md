@@ -2,11 +2,11 @@
 
 Writer Information
 
-Student Name: Kim Jinha
+Name: Kim Jinha
 
-Student Major: AI
+Major: AI
 
-Student Code: 202135751
+Code: 202135751
 
 
 Socket Homwork - Quiz game
