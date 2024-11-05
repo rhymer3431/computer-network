@@ -1,21 +1,26 @@
 package server;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class ClientHandler extends Thread{
-    ArrayList<String[]> QAList;
-    Socket connection;
+
+    ArrayList<String[]> QAList; // list of question and answer
+
+    Socket connection; // client socket that connected with server
+
+    // about I/O
     BufferedReader serverReader;
     PrintWriter serverWriter;
-    int score;
 
-    boolean running;
+    private int score; // total score
+
+    boolean running; // used to exit loop
+
+    // macro
     private static final int COMMAND_TYPE = 0;
     private static final int COMMAND_TARGET = 1;
     private static final int COMMAND_NUMBER = 2;
@@ -23,85 +28,74 @@ public class ClientHandler extends Thread{
     private static final int QUESTION = 0;
     private static final int ANSWER = 1;
 
-    public ClientHandler(Socket s){
+    public ClientHandler(Socket s, ArrayList<String[]> qalist){
+        // initialize
         running = true;
+        QAList = qalist;
         score = 0;
         connection = s;
+
         try {
-            QAList = getQuizAnswer();
             serverReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             serverWriter = new PrintWriter(connection.getOutputStream(),true);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
     }
-
-     public static ArrayList <String[]> getQuizAnswer(){
-        ArrayList<String[]> QAList = new ArrayList<>();
-        try(Scanner reader = new Scanner(new File("./server/quiz_ans.dat"))){
-            while(reader.hasNextLine()){
-                String line = reader.nextLine();
-                String[] format = line.split("/");
-                QAList.add(format);
-            }
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-        return QAList;
-    }
-
 
     @Override
     public void run(){
         System.out.printf("new client connected\n");
-
 
         String message = "";
         String[] command;
         while (running) { 
             try{
                 message = serverReader.readLine();
-                
             }
             catch(Exception e){
                 e.printStackTrace();
             }
+            // read message from client, then split by paremeter '/'
             command = message.split("/");
+
+            /*
+             * commad type
+             * 1. request/target/related_number -> request target[number]
+             * 2. message/message to send (actually, not used) -> print message
+             * 3. disconnect -> disconnect to client
+             */
             
             switch (command[COMMAND_TYPE]){
                 case "request":
-                int number=0;
+                int related_number=0;
                 try {
-                    number = Integer.parseInt(command[COMMAND_NUMBER]);
+                    related_number = Integer.parseInt(command[COMMAND_NUMBER]);
                 } catch (Exception e) {
-                    // not request question or answer
+                    // request score -> no need related number
                 }
-                
                     switch(command[COMMAND_TARGET]){
                         
                         case "question": 
-
-                            serverWriter.println(QAList.get(number)[QUESTION]); 
+                            serverWriter.println(QAList.get(related_number)[QUESTION]); 
                             break;
                         case "answer" : 
-                            String answer = QAList.get(number)[ANSWER];
-                            if(command[3].equals(answer)){
+                            String answer = QAList.get(related_number)[ANSWER];
+                            if(command[3].equals(answer)){ // compare user input and correct answer 
                                 score += 10;
-                                serverWriter.println(answer+"/true");
+                                serverWriter.println(answer+"/true"); // send correct answer and result to client
                             }
                             else serverWriter.println(answer+"/false");
                             break;
                         case "score" :
-                        serverWriter.println(String.valueOf(score));
+                        serverWriter.println(String.valueOf(score)); // send score to client
                             
                     }
                     break;
-                case "message":
+                case "message": // not used
                     System.out.printf("%s\n",command[COMMAND_TARGET]);
                     break;
-                case "disconnect":
+                case "disconnect": // make while condition false
                     System.out.printf("client disconnected\n");
                     running = false;
                 default:
