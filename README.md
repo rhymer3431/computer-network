@@ -25,7 +25,7 @@ Create a quiz game program using sockets.
 - The Client class focuses on connecting to the server, delegating communication to the `Client CommandHandler`.
 - Send a disconnect notification to the server to prevent abnormal termination.
 
-## Protocol
+### Protocol
 Command Protocol
 Command is separated by ‘/’ character, and format like Type/Target/Number.
 Command Type
