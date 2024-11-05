@@ -8,7 +8,7 @@
 Create a quiz game program using sockets.
 
 ### Goals
-1. Read server information from `server_info.dat` in the client program.
+1. Read server information from `server_info.dat` in the client directory.
 2. Request questions from the server, receive answers from the user, and then request results from the server.
 3. The server should save the score of the current user and send it to the client when all questions are completed.
 4. Use threads to allow multiple clients to connect simultaneously.
