@@ -7,7 +7,7 @@ public class Client {
 
     private static String server_ip;
     private static int port;
-
+    private static ClientCommandHandler command;
     private static BufferedReader keyboard;
     private static BufferedReader clientReader;
     private static PrintWriter clientWriter;
@@ -35,6 +35,7 @@ public class Client {
             );
             clientWriter = new PrintWriter(client.getOutputStream(),true);
 
+            command = new ClientCommandHandler(clientReader,clientWriter);
             System.out.printf("connected\n\n");
             
         }
@@ -60,10 +61,10 @@ public class Client {
 
             }
             
-            System.out.printf("------------------\n");
+            System.out.printf("---------------------\n");
             System.out.printf("ip: %s\n",server_ip);
             System.out.printf("port: %d\n",port);
-            System.out.printf("------------------\n\n");
+            System.out.printf("---------------------\n\n");
         }
         catch(Exception e){
             // default setting
@@ -72,69 +73,33 @@ public class Client {
             e.printStackTrace();
         }
     }
-
-    public static int getScore(){
-        try {
-            clientWriter.println("request/score");
-            String score_str = clientReader.readLine();
-            int score = Integer.parseInt(score_str);
-            return score;
-        } catch (Exception e) {
-            return -1;
-        }
-    }
-    public static String getQuestion(int number){
-        try{
-            String request_command = "request/question/"+ String.valueOf(number);
-            clientWriter.println(request_command);
-            String question = clientReader.readLine();
-            return question;  
-        }
-        catch(Exception e){
-            return "error";
-        }
-          
-    }
-    public static void getResult(int number, String answer){
-        try {
-            int RESULT = 1;
-            int ANSWER = 0;
-            // send answer to server
-            clientWriter.println("request/answer/"+String.valueOf(number)+"/"+answer);
-            
-            // receive result from server format like "result/answer"
-            String[] result = clientReader.readLine().split("/");
-            if(result[RESULT].equals("true")){
-                System.out.printf("correct! (+10 points)\n");
-            }
-            else{
-                System.out.printf("incorrect.\n");
-                System.out.printf("Feedback: %s\n",result[ANSWER]);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         
-    }
+    
     public static void start() throws IOException{
-        System.out.printf("Let's start a quiz!\n");
-        
+        System.out.printf("\n*******************************\n");
+        System.out.printf("*                             *\n");
+        System.out.printf("*     Let's start a quiz!     *\n");
+        System.out.printf("*                             *\n");
+        System.out.printf("*******************************\n\n");
 
         // request quiz
         try {
             for (int i=0; i<10; i++){
-                String question = getQuestion(i);
+                // request question to server
+                String question = command.getQuestion(i);
                 
-                System.out.printf("Quiz %d. %s\n",i+1,question);
-                System.out.printf("Enter answer : ");
+                System.out.printf("[Quiz %d/10]\n%s\n",i+1,question);
+                System.out.printf("\nEnter answer : ");
                 String answer = keyboard.readLine();
-                getResult(i,answer);
 
+                command.getResult(i,answer);
                 
+                System.out.println();
                 System.out.println();
                 
             }
-            System.out.printf("your total score is %s!\n",getScore());
+            int score = command.getScore(); 
+            System.out.printf("\nyour total score is %d!\n",score);
 
             clientWriter.println("disconnect");
             
