@@ -25,7 +25,8 @@ Create a quiz game program using sockets.
 - The Client class focuses on connecting to the server, delegating communication to the `Client CommandHandler`.
 - Send a disconnect notification to the server to prevent abnormal termination.
 
-https://github.com/rhymer3431/computer-network/blob/main/%EC%95%84%ED%82%A4%ED%85%8D%EC%B3%90.png?raw=true
+#### Architecture Diagram
+![Diagram](https://github.com/rhymer3431/computer-network/blob/main/%EC%95%84%ED%82%A4%ED%85%8D%EC%B3%90.png?raw=true)
 
 ## Writer Information
 
