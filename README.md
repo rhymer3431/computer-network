@@ -1,4 +1,10 @@
 # computer-network
+
+Writer Information
+Student Name: Kim Jinha
+Student Major: AI
+Student Code: 202135751
+
 Socket Homwork - Quiz game
 
 Make a quiz game program using socket.
